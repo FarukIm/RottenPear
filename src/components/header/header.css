@@ -1,0 +1,15 @@
+.titleContainer {
+	width: 100%;
+	height: fit-content;
+	background-color: #f24405;
+	font-family: "Courier New", Courier, monospace;
+	font-weight: 900;
+	font-size: 4rem;
+	letter-spacing: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	padding-left: 3rem;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+}
