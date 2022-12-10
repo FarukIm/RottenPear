@@ -4,28 +4,31 @@ import Header from "../../components/header";
 //Api
 import { getTopMovies } from "../../api/movies";
 import { getTopShows } from "../../api/tvshows";
+//Interfaces
 import { IMovie } from "../../utils/interfaces/movies.interface";
 import { IShow } from "../../utils/interfaces/shows.interface";
+//Enums
+import { DisplayTypes } from "../../utils/enums/homepage.enum";
 
 const HomePage = () => {
-	const [displayData, setDisplayData] = useState<IMovie[] | IShow[]>([]);
+	const [displayData, setDisplayData] = useState<DisplayTypes>(
+		DisplayTypes.Movies
+	);
 	const [topMovies, setTopMovies] = useState<IMovie[]>([]);
 	const [topShows, setTopShows] = useState<IShow[]>([]);
 	const getData = async () => {
 		const movieData = await getTopMovies();
 		const showData = await getTopShows();
-		console.log(showData);
 		setTopMovies(movieData);
 		setTopShows(showData);
-		setDisplayData(topMovies);
 	};
 	useEffect(() => {
 		getData();
 	}, []);
 
 	const updateDisplayData = (name: string) => {
-		if (name.toLowerCase() === "tv shows") setDisplayData(topShows);
-		else setDisplayData(topMovies);
+		if (name.toLowerCase() === "shows") setDisplayData(DisplayTypes.Shows);
+		else setDisplayData(DisplayTypes.Movies);
 	};
 
 	const searchBar = () => {
@@ -50,22 +53,37 @@ const HomePage = () => {
 		return (item as IMovie).title !== undefined;
 	};
 
-	const renderItems = (item: IMovie | IShow) => {
-		if (isItemMovie(item)) {
-			return <p>{item.title}</p>;
-		} else {
-			return <p>{item.name}</p>;
-		}
+	const getPoster = (path: string) => {
+		return <img src={"https://image.tmdb.org/t/p/w300" + path}></img>;
+	};
+
+	const renderMovie = (item: IMovie) => {
+		return (
+			<div>
+				{getPoster(item.poster_path)}
+				<p>{item.title}</p>;
+			</div>
+		);
+	};
+	const renderShow = (item: IShow) => {
+		return (
+			<div>
+				{getPoster(item.poster_path)}
+				<p>{item.name}</p>;
+			</div>
+		);
 	};
 
 	return (
-		<div>
+		<>
 			<Header />
 			{searchBar()}
 			{categoryButton("Movies")}
-			{categoryButton("TV Shows")}
-			{displayData?.map((item) => renderItems(item))}
-		</div>
+			{categoryButton("Shows")}
+			{displayData === DisplayTypes.Movies
+				? topMovies.map((item) => renderMovie(item))
+				: topShows.map((item) => renderShow(item))}
+		</>
 	);
 };
 
