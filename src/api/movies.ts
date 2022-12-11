@@ -7,4 +7,33 @@ const getTopMovies = async () => {
 	return data;
 };
 
-export { getTopMovies };
+const getSearchMovies = async (term: string) => {
+	const response = await fetch(
+		`https://api.themoviedb.org/3/search/movie?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US&query=${term}&page=1&include_adult=false`
+	);
+	const data = await response.json();
+	return data;
+};
+
+const getMovie = async (id: string | undefined) => {
+	const response = await fetch(
+		`https://api.themoviedb.org/3/movie/${id}?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US`
+	);
+	const data = await response.json();
+	return data;
+};
+
+const getMovieTrailer = async (id: string | undefined) => {
+	const response = await fetch(
+		`https://api.themoviedb.org/3/movie/${id}/videos?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US`
+	);
+	const data = await response.json();
+	for (const element of data.results) {
+		if (element.site === "YouTube" && element.official === true) {
+			return element.key;
+		}
+	}
+	return false;
+};
+
+export { getTopMovies, getSearchMovies, getMovie, getMovieTrailer };

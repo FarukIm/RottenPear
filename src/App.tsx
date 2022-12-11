@@ -14,7 +14,7 @@ function App() {
 	return (
 		<Router>
 			<Routes>
-				<Route path='/item/:id' element={<MoviePage />} />
+				<Route path='/item/:type/:id' element={<MoviePage />} />
 				<Route path='/homepage' element={<HomePage />} />
 				<Route path='*' element={<Navigate to='/homepage' />} />
 			</Routes>
