@@ -23,13 +23,17 @@ const getMovie = async (id: string | undefined) => {
 	return data;
 };
 
-const getMovieTrailer = async (id: string | undefined) => {
+const getMovieTrailer = async (id: number | undefined) => {
 	const response = await fetch(
 		`https://api.themoviedb.org/3/movie/${id}/videos?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US`
 	);
 	const data = await response.json();
 	for (const element of data.results) {
-		if (element.site === "YouTube" && element.official === true) {
+		if (
+			element.site === "YouTube" &&
+			element.official === true &&
+			element.type === "Trailer"
+		) {
 			return element.key;
 		}
 	}

@@ -9,13 +9,17 @@ import { IMovie } from "../../utils/interfaces/movies.interface";
 import { IShow } from "../../utils/interfaces/shows.interface";
 //Enums
 import { DisplayTypes } from "../../utils/enums/homepage.enum";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+	const navigate = useNavigate();
+	const location = useLocation();
 	const [displayData, setDisplayData] = useState<DisplayTypes>(
-		DisplayTypes.Movies
+		location ? location.state.display : DisplayTypes.Movies
 	);
-	const [searchValue, setSearchValue] = useState("");
+	const [searchValue, setSearchValue] = useState(
+		location ? location.state.search : ""
+	);
 	const [searchOutput, setSearchOutput] = useState([]);
 	const [topMovies, setTopMovies] = useState<IMovie[]>([]);
 	const [topShows, setTopShows] = useState<IShow[]>([]);
@@ -46,7 +50,7 @@ const HomePage = () => {
 		} else {
 			getSearchItems();
 		}
-	}, [displayData]);
+	}, [displayData, searchValue]);
 
 	const updateDisplayData = (name: string) => {
 		if (name.toLowerCase() === "shows") setDisplayData(DisplayTypes.Shows);
@@ -58,6 +62,7 @@ const HomePage = () => {
 			<div>
 				<input
 					type='search'
+					value={searchValue}
 					onChange={(e) => {
 						setSearchValue(e.target.value);
 					}}
@@ -94,22 +99,34 @@ const HomePage = () => {
 
 	const renderMovie = (item: IMovie) => {
 		return (
-			<Link to={"../item/movie/" + item.id}>
+			<div
+				onClick={() => {
+					navigate("../item/movie/" + item.id, {
+						state: { search: searchValue, display: displayData },
+					});
+				}}
+			>
 				<div>
 					{getPoster(item.poster_path)}
 					<p>{item.title}</p>;
 				</div>
-			</Link>
+			</div>
 		);
 	};
 	const renderShow = (item: IShow) => {
 		return (
-			<Link to={"../item/show/" + item.id}>
+			<div
+				onClick={() => {
+					navigate("../item/show/" + item.id, {
+						state: { search: searchValue, display: displayData },
+					});
+				}}
+			>
 				<div>
 					{getPoster(item.poster_path)}
 					<p>{item.name}</p>;
 				</div>
-			</Link>
+			</div>
 		);
 	};
 
