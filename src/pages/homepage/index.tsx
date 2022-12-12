@@ -1,4 +1,6 @@
+//Libs
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 //Components
 import Header from "../../components/header";
 //Api
@@ -9,16 +11,18 @@ import { IMovie } from "../../utils/interfaces/movies.interface";
 import { IShow } from "../../utils/interfaces/shows.interface";
 //Enums
 import { DisplayTypes } from "../../utils/enums/homepage.enum";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+//Style
+import "./homepage.css";
 
 const HomePage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const [displayData, setDisplayData] = useState<DisplayTypes>(
-		location ? location.state.display : DisplayTypes.Movies
+	const [locationData, setLocationData] = useState(location.state);
+	const [displayData, setDisplayData] = useState<DisplayTypes | null>(
+		locationData ? locationData.display : DisplayTypes.Movies
 	);
 	const [searchValue, setSearchValue] = useState(
-		location ? location.state.search : ""
+		locationData ? locationData.search : ""
 	);
 	const [searchOutput, setSearchOutput] = useState([]);
 	const [topMovies, setTopMovies] = useState<IMovie[]>([]);
@@ -45,6 +49,8 @@ const HomePage = () => {
 	};
 
 	useEffect(() => {
+		setLocationData(location.state);
+
 		if (searchValue.length < 3) {
 			getData();
 		} else {
@@ -53,14 +59,15 @@ const HomePage = () => {
 	}, [displayData, searchValue]);
 
 	const updateDisplayData = (name: string) => {
-		if (name.toLowerCase() === "shows") setDisplayData(DisplayTypes.Shows);
+		if (name === DisplayTypes.TV) setDisplayData(DisplayTypes.TV);
 		else setDisplayData(DisplayTypes.Movies);
 	};
 
 	const searchBar = () => {
 		return (
-			<div>
+			<div className='center margin-top'>
 				<input
+					className='searchBar'
 					type='search'
 					value={searchValue}
 					onChange={(e) => {
@@ -79,9 +86,15 @@ const HomePage = () => {
 	};
 
 	const categoryButton = (name: string) => {
+		const show = name === "Shows" ? DisplayTypes.TV : DisplayTypes.Movies;
 		return (
 			<div>
-				<button onClick={() => updateDisplayData(name.toLowerCase())}>
+				<button
+					className={
+						show === displayData ? "categoryButtonSelected" : "categoryButton"
+					}
+					onClick={() => updateDisplayData(show)}
+				>
 					{name}
 				</button>
 			</div>
@@ -91,8 +104,9 @@ const HomePage = () => {
 	const getPoster = (path: string) => {
 		return (
 			<img
+				className='poster'
 				src={"https://image.tmdb.org/t/p/w300" + path}
-				alt='Image not available'
+				alt='Movie Poster'
 			></img>
 		);
 	};
@@ -100,15 +114,16 @@ const HomePage = () => {
 	const renderMovie = (item: IMovie) => {
 		return (
 			<div
+				className='itemContainer'
 				onClick={() => {
 					navigate("../item/movie/" + item.id, {
 						state: { search: searchValue, display: displayData },
 					});
 				}}
 			>
-				<div>
+				<div className='posterContainer'>
 					{getPoster(item.poster_path)}
-					<p>{item.title}</p>;
+					<p>{item.title}</p>
 				</div>
 			</div>
 		);
@@ -116,13 +131,14 @@ const HomePage = () => {
 	const renderShow = (item: IShow) => {
 		return (
 			<div
+				className='itemContainer'
 				onClick={() => {
-					navigate("../item/show/" + item.id, {
+					navigate("../item/tv/" + item.id, {
 						state: { search: searchValue, display: displayData },
 					});
 				}}
 			>
-				<div>
+				<div className='posterContainer'>
 					{getPoster(item.poster_path)}
 					<p>{item.name}</p>;
 				</div>
@@ -150,9 +166,11 @@ const HomePage = () => {
 		<>
 			<Header />
 			{searchBar()}
-			{categoryButton("Movies")}
-			{categoryButton("Shows")}
-			{displayContent()}
+			<div className='center margin-top'>
+				{categoryButton("Movies")}
+				{categoryButton("Shows")}
+			</div>
+			<div className='container margin-top'>{displayContent()}</div>
 		</>
 	);
 };

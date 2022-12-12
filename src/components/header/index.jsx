@@ -6,9 +6,8 @@ const Header = () => {
 	return (
 		<div className='titleContainer'>
 			<img
+				className='logoStyle'
 				src={rottenpearlogo}
-				width='140'
-				height='100'
 				alt='company logo, rottenPear'
 			/>{" "}
 			RottenPear

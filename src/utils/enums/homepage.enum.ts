@@ -1,4 +1,4 @@
 export enum DisplayTypes {
-	Movies = "movies",
-	Shows = "shows",
+	Movies = "movie",
+	TV = "tv",
 }

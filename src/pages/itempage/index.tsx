@@ -3,20 +3,35 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import Header from "../../components/header";
 
-import { getMovie, getMovieTrailer } from "../../api/movies";
-import { IMovie } from "../../utils/interfaces/movies.interface";
+import { getMovie, getTrailer } from "../../api/movies";
+import { getShow } from "../../api/tvshows";
 
-const MoviePage = () => {
+import { DisplayTypes } from "../../utils/enums/homepage.enum";
+
+const ItemPage = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const { type, id } = useParams();
-	const [data, setData] = useState<any>();
-	const [trailer, setTrailer] = useState<string | boolean>();
+	const [data, setData] = useState<any>([]);
+	const [trailer, setTrailer] = useState();
+
 	const getData = async () => {
-		const _data = await getMovie(id);
-		setData(_data);
-		const _trailer = await getMovieTrailer(data?.id);
+		if (type === DisplayTypes.Movies) {
+			const _data = await getMovie(id);
+			setData(_data);
+		} else {
+			const _data = await getShow(id);
+			setData(_data);
+		}
+		const _trailer = await getTrailer(id, type);
 		setTrailer(_trailer);
+	};
+	const renderTitle = () => {
+		if (type === DisplayTypes.Movies) {
+			return <div>{data?.title}</div>;
+		} else {
+			return <div>{data?.name}</div>;
+		}
 	};
 	const getPoster = (path: string | undefined) => {
 		return (
@@ -37,14 +52,14 @@ const MoviePage = () => {
 							search: location.state.search,
 							display: location.state.display,
 						},
+						replace: true,
 					});
 				}}
 			>
 				Back
 			</div>
-			<p>{location.state.search === null}</p>
-			<p>{data?.title ? data.title : data?.name}</p>
-			{trailer !== false ? (
+			{renderTitle()}
+			{trailer ? (
 				<iframe
 					width='560'
 					height='315'
@@ -54,8 +69,9 @@ const MoviePage = () => {
 			) : (
 				getPoster(data?.poster_path)
 			)}
+			<div>{data.overview}</div>
 		</>
 	);
 };
 
-export default MoviePage;
+export default ItemPage;

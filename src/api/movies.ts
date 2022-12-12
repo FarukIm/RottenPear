@@ -23,11 +23,12 @@ const getMovie = async (id: string | undefined) => {
 	return data;
 };
 
-const getMovieTrailer = async (id: number | undefined) => {
+const getTrailer = async (id: string | undefined, type: string | undefined) => {
 	const response = await fetch(
-		`https://api.themoviedb.org/3/movie/${id}/videos?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US`
+		`https://api.themoviedb.org/3/${type}/${id}/videos?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US`
 	);
 	const data = await response.json();
+
 	for (const element of data.results) {
 		if (
 			element.site === "YouTube" &&
@@ -37,7 +38,7 @@ const getMovieTrailer = async (id: number | undefined) => {
 			return element.key;
 		}
 	}
-	return false;
+	return undefined;
 };
 
-export { getTopMovies, getSearchMovies, getMovie, getMovieTrailer };
+export { getTopMovies, getSearchMovies, getMovie, getTrailer };
