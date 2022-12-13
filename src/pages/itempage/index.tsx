@@ -8,6 +8,8 @@ import { getShow } from "../../api/tvshows";
 
 import { DisplayTypes } from "../../utils/enums/homepage.enum";
 
+import "./itempage.css";
+
 const ItemPage = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -35,7 +37,11 @@ const ItemPage = () => {
 	};
 	const getPoster = (path: string | undefined) => {
 		return (
-			<img src={"https://image.tmdb.org/t/p/w300" + path} alt='Cover'></img>
+			<img
+				className='poster'
+				src={"https://image.tmdb.org/t/p/w300" + path}
+				alt='Cover'
+			></img>
 		);
 	};
 	useEffect(() => {
@@ -45,31 +51,45 @@ const ItemPage = () => {
 	return (
 		<>
 			<Header />
-			<div
-				onClick={() => {
-					navigate("../../../homepage", {
-						state: {
-							search: location.state.search,
-							display: location.state.display,
-						},
-						replace: true,
-					});
-				}}
-			>
-				Back
+			<div className='center'>
+				<div className='container'>
+					<div className='start'>
+						<div
+							className='backButton margin-top margin-left'
+							onClick={() => {
+								navigate("../../../homepage", {
+									state: {
+										search: location.state.search,
+										display: location.state.display,
+									},
+									replace: true,
+								});
+							}}
+						>
+							<div className='backArrow' />
+							Back
+						</div>
+					</div>
+					<h1 className='itemTitle'>{renderTitle()}</h1>
+					<div className='mediaContainer start '>
+						{trailer ? (
+							<iframe
+								className='video'
+								src={`https://www.youtube.com/embed/${trailer}`}
+								title='YouTube video player'
+							/>
+						) : (
+							getPoster(data?.poster_path)
+						)}
+					</div>
+					<div className='start'>
+						<div className='overview '>
+							<h2>Overview:</h2>
+							{data.overview}
+						</div>
+					</div>
+				</div>
 			</div>
-			{renderTitle()}
-			{trailer ? (
-				<iframe
-					width='560'
-					height='315'
-					src={`https://www.youtube.com/embed/${trailer}`}
-					title='YouTube video player'
-				/>
-			) : (
-				getPoster(data?.poster_path)
-			)}
-			<div>{data.overview}</div>
 		</>
 	);
 };
