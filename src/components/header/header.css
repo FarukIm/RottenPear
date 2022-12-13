@@ -1,6 +1,6 @@
 .titleContainer {
 	width: 100%;
-	height: fit-content;
+	height: min-content;
 	background-color: #9e7b25;
 	font-family: "Courier New", Courier, monospace;
 	font-weight: 600;
@@ -12,8 +12,8 @@
 	align-items: center;
 	justify-content: flex-start;
 	padding-left: 2%;
-	padding-top: 1rem;
-	padding-bottom: 2rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
 }
 
 .logoStyle {

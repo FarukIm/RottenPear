@@ -106,7 +106,7 @@ const HomePage = () => {
 			<img
 				className='poster'
 				src={"https://image.tmdb.org/t/p/w300" + path}
-				alt='Movie Poster'
+				alt='Movie poster not available'
 			></img>
 		);
 	};
@@ -140,7 +140,7 @@ const HomePage = () => {
 			>
 				<div className='posterContainer'>
 					{getPoster(item.poster_path)}
-					<p>{item.name}</p>;
+					<p>{item.name}</p>
 				</div>
 			</div>
 		);
@@ -170,7 +170,9 @@ const HomePage = () => {
 				{categoryButton("Movies")}
 				{categoryButton("Shows")}
 			</div>
-			<div className='container margin-top'>{displayContent()}</div>
+			<div className='center'>
+				<div className='container margin-top'>{displayContent()}</div>
+			</div>
 		</>
 	);
 };
