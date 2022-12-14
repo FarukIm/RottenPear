@@ -1,17 +1,17 @@
+//Libs
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
+//Components
 import Header from "../../components/header";
-
+//Api
 import { getMovie, getTrailer } from "../../api/movies";
 import { getShow } from "../../api/tvshows";
-
+//Enum
 import { DisplayTypes } from "../../utils/enums/homepage.enum";
-
+//Style
 import "./itempage.css";
 
 const ItemPage = () => {
-	const location = useLocation();
 	const navigate = useNavigate();
 	const { type, id } = useParams();
 	const [data, setData] = useState<any>([]);
@@ -40,7 +40,7 @@ const ItemPage = () => {
 			<img
 				className='poster'
 				src={"https://image.tmdb.org/t/p/w300" + path}
-				alt='Cover'
+				alt='Poster not available'
 			></img>
 		);
 	};
@@ -57,13 +57,7 @@ const ItemPage = () => {
 						<div
 							className='backButton margin-top margin-left'
 							onClick={() => {
-								navigate("../../../homepage", {
-									state: {
-										search: location.state.search,
-										display: location.state.display,
-									},
-									replace: true,
-								});
+								navigate(-1);
 							}}
 						>
 							<div className='backArrow' />
@@ -71,7 +65,7 @@ const ItemPage = () => {
 						</div>
 					</div>
 					<h1 className='itemTitle'>{renderTitle()}</h1>
-					<div className='mediaContainer start '>
+					<div className='mediaContainer start'>
 						{trailer ? (
 							<iframe
 								className='video'

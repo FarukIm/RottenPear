@@ -1,6 +1,6 @@
 //Libs
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 //Components
 import Header from "../../components/header";
 //Api
@@ -16,18 +16,18 @@ import "./homepage.css";
 
 const HomePage = () => {
 	const navigate = useNavigate();
-	const location = useLocation();
-	const [locationData, setLocationData] = useState(location.state);
-	const [displayData, setDisplayData] = useState<DisplayTypes | null>(
-		locationData ? locationData.display : DisplayTypes.Movies
+	const [searchParams] = useSearchParams();
+	const searchParam = searchParams.get("s");
+	const [displayData, setDisplayData] = useState<DisplayTypes | string | null>(
+		searchParams.get("d") != null ? searchParams.get("d") : DisplayTypes.Movies
 	);
-	const [searchValue, setSearchValue] = useState(
-		locationData ? locationData.search : ""
+	const [searchValue, setSearchValue] = useState<string>(
+		searchParam ? searchParam : ""
 	);
 	const [searchOutput, setSearchOutput] = useState([]);
 	const [topMovies, setTopMovies] = useState<IMovie[]>([]);
 	const [topShows, setTopShows] = useState<IShow[]>([]);
-	var typingTimer: NodeJS.Timeout;
+	let typingTimer: NodeJS.Timeout;
 
 	const getData = async () => {
 		const movieData = await getTopMovies();
@@ -37,7 +37,7 @@ const HomePage = () => {
 	};
 
 	const getSearchItems = async () => {
-		if (searchValue.length > 2) {
+		if (searchValue && searchValue.length > 2) {
 			if (displayData === DisplayTypes.Movies) {
 				const searchMovies = await getSearchMovies(searchValue);
 				setSearchOutput(searchMovies?.results);
@@ -49,13 +49,13 @@ const HomePage = () => {
 	};
 
 	useEffect(() => {
-		setLocationData(location.state);
-
+		console.log(searchParam);
 		if (searchValue.length < 3) {
 			getData();
 		} else {
 			getSearchItems();
 		}
+		navigate(`/homepage/?s=${searchValue}&d=${displayData}`);
 	}, [displayData, searchValue]);
 
 	const updateDisplayData = (name: string) => {
@@ -106,7 +106,7 @@ const HomePage = () => {
 			<img
 				className='poster'
 				src={"https://image.tmdb.org/t/p/w300" + path}
-				alt='Movie poster not available'
+				alt='Poster not available'
 			></img>
 		);
 	};
@@ -116,9 +116,7 @@ const HomePage = () => {
 			<div
 				className='itemContainer'
 				onClick={() => {
-					navigate("../item/movie/" + item.id, {
-						state: { search: searchValue, display: displayData },
-					});
+					navigate("../item/movie/" + item.id);
 				}}
 			>
 				<div className='posterContainer'>
@@ -133,9 +131,7 @@ const HomePage = () => {
 			<div
 				className='itemContainer'
 				onClick={() => {
-					navigate("../item/tv/" + item.id, {
-						state: { search: searchValue, display: displayData },
-					});
+					navigate("../item/tv/" + item.id);
 				}}
 			>
 				<div className='posterContainer'>
