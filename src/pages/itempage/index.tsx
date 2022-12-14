@@ -38,7 +38,7 @@ const ItemPage = () => {
 	const getPoster = (path: string | undefined) => {
 		return (
 			<img
-				className='poster'
+				className='cover'
 				src={"https://image.tmdb.org/t/p/w300" + path}
 				alt='Poster not available'
 			></img>
