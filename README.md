@@ -8,7 +8,7 @@ git clone https://github.com/FarukIm/RottenPear.git
 
 ## After download
 
-Next, you should navigate to the Client directory within your terminal and install all dependencies by running:
+Next, you should navigate to the RottenPear directory within your terminal and install all dependencies by running:
 
 ```
 npm install
