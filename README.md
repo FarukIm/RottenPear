@@ -1,6 +1,6 @@
 # How to use the project
 
-Clone the project into desired directory by navigating to desired directory openning bash and running:
+Clone the project into desired directory by navigating to desired directory opening bash and running:
 
 ```
 git clone https://github.com/FarukIm/RottenPear.git
