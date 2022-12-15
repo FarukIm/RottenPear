@@ -10,7 +10,7 @@ import { getTopShows, getSearchShows } from "../../api/tvshows";
 import { IMovie } from "../../utils/interfaces/movies.interface";
 import { IShow } from "../../utils/interfaces/shows.interface";
 //Enums
-import { DisplayTypes } from "../../utils/enums/homepage.enum";
+import { ItemTypes } from "../../utils/enums/homepage.enum";
 //Style
 import "./homepage.css";
 
@@ -18,8 +18,8 @@ const HomePage = () => {
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const searchParam = searchParams.get("s");
-	const [displayData, setDisplayData] = useState<DisplayTypes | string | null>(
-		searchParams.get("d") != null ? searchParams.get("d") : DisplayTypes.Movies
+	const [displayData, setDisplayData] = useState<ItemTypes | string | null>(
+		searchParams.get("d") != null ? searchParams.get("d") : ItemTypes.Movies
 	);
 	const [searchValue, setSearchValue] = useState<string>(
 		searchParam ? searchParam : ""
@@ -38,7 +38,7 @@ const HomePage = () => {
 
 	const getSearchItems = async () => {
 		if (searchValue && searchValue.length > 2) {
-			if (displayData === DisplayTypes.Movies) {
+			if (displayData === ItemTypes.Movies) {
 				const searchMovies = await getSearchMovies(searchValue);
 				setSearchOutput(searchMovies?.results);
 			} else {
@@ -59,8 +59,8 @@ const HomePage = () => {
 	}, [displayData, searchValue]);
 
 	const updateDisplayData = (name: string) => {
-		if (name === DisplayTypes.TV) setDisplayData(DisplayTypes.TV);
-		else setDisplayData(DisplayTypes.Movies);
+		if (name === ItemTypes.TV) setDisplayData(ItemTypes.TV);
+		else setDisplayData(ItemTypes.Movies);
 	};
 
 	const searchBar = () => {
@@ -86,7 +86,7 @@ const HomePage = () => {
 	};
 
 	const categoryButton = (name: string) => {
-		const show = name === "Shows" ? DisplayTypes.TV : DisplayTypes.Movies;
+		const show = name === "Shows" ? ItemTypes.TV : ItemTypes.Movies;
 		return (
 			<div>
 				<button
@@ -143,7 +143,7 @@ const HomePage = () => {
 	};
 
 	const displayContent = () => {
-		if (displayData === DisplayTypes.Movies) {
+		if (displayData === ItemTypes.Movies) {
 			if (searchValue.length < 3) {
 				return topMovies.map((item) => renderMovie(item));
 			} else {

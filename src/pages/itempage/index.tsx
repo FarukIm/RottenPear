@@ -7,7 +7,7 @@ import Header from "../../components/header";
 import { getMovie, getTrailer } from "../../api/movies";
 import { getShow } from "../../api/tvshows";
 //Enum
-import { DisplayTypes } from "../../utils/enums/homepage.enum";
+import { ItemTypes } from "../../utils/enums/homepage.enum";
 //Style
 import "./itempage.css";
 
@@ -18,7 +18,7 @@ const ItemPage = () => {
 	const [trailer, setTrailer] = useState();
 
 	const getData = async () => {
-		if (type === DisplayTypes.Movies) {
+		if (type === ItemTypes.Movies) {
 			const _data = await getMovie(id);
 			setData(_data);
 		} else {
@@ -28,13 +28,15 @@ const ItemPage = () => {
 		const _trailer = await getTrailer(id, type);
 		setTrailer(_trailer);
 	};
+
 	const renderTitle = () => {
-		if (type === DisplayTypes.Movies) {
+		if (type === ItemTypes.Movies) {
 			return <div>{data?.title}</div>;
 		} else {
 			return <div>{data?.name}</div>;
 		}
 	};
+
 	const getPoster = (path: string | undefined) => {
 		return (
 			<img
@@ -44,6 +46,7 @@ const ItemPage = () => {
 			></img>
 		);
 	};
+
 	useEffect(() => {
 		getData();
 	}, []);
@@ -55,7 +58,7 @@ const ItemPage = () => {
 				<div className='container'>
 					<div className='start'>
 						<div
-							className='backButton margin-top margin-left'
+							className='backButton margin-top'
 							onClick={() => {
 								navigate(-1);
 							}}
