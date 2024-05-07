@@ -1,33 +1,21 @@
 //Libs
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 //Components
-import Header from "../../components/header";
+import Header from '../../components/Header';
 //Api
-import { getMovie, getTrailer } from "../../api/movies";
-import { getShow } from "../../api/tvshows";
+import { getMovie, getTrailer } from '../../api/movies';
+import { getShow } from '../../api/tvshows';
 //Enum
-import { ItemTypes } from "../../utils/enums/homepage.enum";
+import { ItemTypes } from '../../utils/enums/homepage.enum';
 //Style
-import "./itempage.css";
+import './itempage.css';
 
 const ItemPage = () => {
 	const navigate = useNavigate();
 	const { type, id } = useParams();
 	const [data, setData] = useState<any>([]);
 	const [trailer, setTrailer] = useState();
-
-	const getData = async () => {
-		if (type === ItemTypes.Movies) {
-			const _data = await getMovie(id);
-			setData(_data);
-		} else {
-			const _data = await getShow(id);
-			setData(_data);
-		}
-		const _trailer = await getTrailer(id, type);
-		setTrailer(_trailer);
-	};
 
 	const renderTitle = () => {
 		if (type === ItemTypes.Movies) {
@@ -40,47 +28,56 @@ const ItemPage = () => {
 	const getPoster = (path: string | undefined) => {
 		return (
 			<img
-				className='cover'
-				src={"https://image.tmdb.org/t/p/w300" + path}
-				alt='Poster not available'
-			></img>
+				className="cover"
+				src={'https://image.tmdb.org/t/p/w300' + path}
+				alt="Poster not available"></img>
 		);
 	};
 
 	useEffect(() => {
+		const getData = async () => {
+			if (type === ItemTypes.Movies) {
+				const _data = await getMovie(id);
+				setData(_data);
+			} else {
+				const _data = await getShow(id);
+				setData(_data);
+			}
+			const _trailer = await getTrailer(id, type);
+			setTrailer(_trailer);
+		};
 		getData();
 	}, []);
 
 	return (
 		<>
 			<Header />
-			<div className='center'>
-				<div className='container'>
-					<div className='start'>
-						<div
-							className='backButton margin-top'
+			<div className="center">
+				<div className="container">
+					<div className="start">
+						<button
+							className="backButton margin-top"
 							onClick={() => {
 								navigate(-1);
-							}}
-						>
-							<div className='backArrow' />
+							}}>
+							<div className="backArrow" />
 							Back
-						</div>
+						</button>
 					</div>
-					<h1 className='itemTitle'>{renderTitle()}</h1>
-					<div className='mediaContainer start'>
+					<h1 className="itemTitle">{renderTitle()}</h1>
+					<div className="mediaContainer start">
 						{trailer ? (
 							<iframe
-								className='video'
+								className="video"
 								src={`https://www.youtube.com/embed/${trailer}`}
-								title='YouTube video player'
+								title="YouTube video player"
 							/>
 						) : (
 							getPoster(data?.poster_path)
 						)}
 					</div>
-					<div className='start'>
-						<div className='overview '>
+					<div className="start">
+						<div className="overview ">
 							<h2>Overview:</h2>
 							{data.overview}
 						</div>

@@ -1,28 +1,30 @@
 //Libs
-import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 //Components
-import Header from "../../components/header";
+import Header from '../../components/Header';
+import Search from '../../components/Search';
 //Api
-import { getTopMovies, getSearchMovies } from "../../api/movies";
-import { getTopShows, getSearchShows } from "../../api/tvshows";
+import { getTopMovies, getSearchMovies } from '../../api/movies';
+import { getTopShows, getSearchShows } from '../../api/tvshows';
 //Interfaces
-import { IMovie } from "../../utils/interfaces/movies.interface";
-import { IShow } from "../../utils/interfaces/shows.interface";
+import { IMovie } from '../../utils/interfaces/movies.interface';
+import { IShow } from '../../utils/interfaces/shows.interface';
 //Enums
-import { ItemTypes } from "../../utils/enums/homepage.enum";
+import { ItemTypes } from '../../utils/enums/homepage.enum';
 //Style
-import "./homepage.css";
+import './homepage.css';
+import ItemCard from '../../components/ItemCard';
 
 const HomePage = () => {
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
-	const searchParam = searchParams.get("s");
+	const searchParam = searchParams.get('s');
 	const [displayData, setDisplayData] = useState<ItemTypes | string | null>(
-		searchParams.get("d") != null ? searchParams.get("d") : ItemTypes.Movies
+		searchParams.get('d') != null ? searchParams.get('d') : ItemTypes.TV
 	);
 	const [searchValue, setSearchValue] = useState<string>(
-		searchParam ? searchParam : ""
+		searchParam ? searchParam : ''
 	);
 	const [searchOutput, setSearchOutput] = useState([]);
 	const [topMovies, setTopMovies] = useState<IMovie[]>([]);
@@ -65,10 +67,10 @@ const HomePage = () => {
 
 	const searchBar = () => {
 		return (
-			<div className='center margin-top'>
+			<div className="center margin-top">
 				<input
-					className='searchBar'
-					type='search'
+					className="searchBar"
+					type="search"
 					value={searchValue}
 					onChange={(e) => {
 						setSearchValue(e.target.value);
@@ -79,65 +81,23 @@ const HomePage = () => {
 							getSearchItems();
 						}, 1000);
 					}}
-					placeholder='Search...'
+					placeholder="Search..."
 				/>
 			</div>
 		);
 	};
 
 	const categoryButton = (name: string) => {
-		const show = name === "Shows" ? ItemTypes.TV : ItemTypes.Movies;
+		const show = name === 'TV Shows' ? ItemTypes.TV : ItemTypes.Movies;
 		return (
 			<div>
 				<button
 					className={
-						show === displayData ? "categoryButtonSelected" : "categoryButton"
+						show === displayData ? 'categoryButtonSelected' : 'categoryButton'
 					}
-					onClick={() => updateDisplayData(show)}
-				>
+					onClick={() => updateDisplayData(show)}>
 					{name}
 				</button>
-			</div>
-		);
-	};
-
-	const getPoster = (path: string) => {
-		return (
-			<img
-				className='poster'
-				src={"https://image.tmdb.org/t/p/w300" + path}
-				alt='Poster not available'
-			></img>
-		);
-	};
-
-	const renderMovie = (item: IMovie) => {
-		return (
-			<div
-				className='itemContainer'
-				onClick={() => {
-					navigate("../item/movie/" + item.id);
-				}}
-			>
-				<div className='posterContainer'>
-					{getPoster(item.poster_path)}
-					<p>{item.title}</p>
-				</div>
-			</div>
-		);
-	};
-	const renderShow = (item: IShow) => {
-		return (
-			<div
-				className='itemContainer'
-				onClick={() => {
-					navigate("../item/tv/" + item.id);
-				}}
-			>
-				<div className='posterContainer'>
-					{getPoster(item.poster_path)}
-					<p>{item.name}</p>
-				</div>
 			</div>
 		);
 	};
@@ -145,15 +105,23 @@ const HomePage = () => {
 	const displayContent = () => {
 		if (displayData === ItemTypes.Movies) {
 			if (searchValue.length < 3) {
-				return topMovies.map((item) => renderMovie(item));
+				return topMovies.map((item: IMovie) => (
+					<ItemCard item={item} key={item.id} />
+				));
 			} else {
-				return searchOutput.map((item) => renderMovie(item));
+				return searchOutput.map((item: IMovie) => (
+					<ItemCard item={item} key={item.id} />
+				));
 			}
 		} else {
 			if (searchValue.length < 3) {
-				return topShows.map((item) => renderShow(item));
+				return topShows.map((item: IShow) => (
+					<ItemCard item={item} key={item.id} />
+				));
 			} else {
-				return searchOutput.map((item) => renderShow(item));
+				return searchOutput.map((item: IShow) => (
+					<ItemCard item={item} key={item.id} />
+				));
 			}
 		}
 	};
@@ -161,13 +129,13 @@ const HomePage = () => {
 	return (
 		<>
 			<Header />
-			{searchBar()}
-			<div className='center margin-top'>
-				{categoryButton("Movies")}
-				{categoryButton("Shows")}
+			<Search searchValue={searchValue} setSearchValue={setSearchValue} />
+			<div className="center margin-top">
+				{categoryButton('TV Shows')}
+				{categoryButton('Movies')}
 			</div>
-			<div className='center'>
-				<div className='container margin-top'>{displayContent()}</div>
+			<div className="center">
+				<div className="container margin-top">{displayContent()}</div>
 			</div>
 		</>
 	);
