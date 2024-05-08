@@ -1,44 +1,68 @@
+import axios from 'axios';
+
 const getTopMovies = async () => {
-	const response = await fetch(
-		"https://api.themoviedb.org/3/movie/top_rated?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US&page=1"
-	);
-	let data = await response.json();
-	data = data.results.slice(0, 10);
-	return data;
+	const options = {
+		method: 'GET',
+		url: `movie/top_rated?language=en-US&page=1`,
+	};
+	try {
+		const { data: response } = await axios.request(options);
+		return response.results.slice(0, 10);
+	} catch (e) {
+		console.log(e);
+		return e;
+	}
 };
 
 const getSearchMovies = async (term: string) => {
-	const response = await fetch(
-		`https://api.themoviedb.org/3/search/movie?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US&query=${term}&page=1&include_adult=false`
-	);
-	const data = await response.json();
-	return data;
+	const options = {
+		method: 'GET',
+		url: `search/movie?query=${term}&language=en-US&page=1&include_adult=false`,
+	};
+	try {
+		const { data: response } = await axios.request(options);
+		return response.results;
+	} catch (e) {
+		console.log(e);
+		return e;
+	}
 };
 
 const getMovie = async (id: string | undefined) => {
-	const response = await fetch(
-		`https://api.themoviedb.org/3/movie/${id}?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US`
-	);
-	const data = await response.json();
-	return data;
+	const options = {
+		method: 'GET',
+		url: `movie/${id}?language=en-US`,
+	};
+	try {
+		const { data: response } = await axios.request(options);
+		return response;
+	} catch (e) {
+		console.log(e);
+		return e;
+	}
 };
 
 const getTrailer = async (id: string | undefined, type: string | undefined) => {
-	const response = await fetch(
-		`https://api.themoviedb.org/3/${type}/${id}/videos?api_key=c71c4cfcca0d03f577a5e60d21141c58&language=en-US`
-	);
-	const data = await response.json();
-
-	for (const element of data.results) {
-		if (
-			element.site === "YouTube" &&
-			element.official === true &&
-			element.type === "Trailer"
-		) {
-			return element.key;
+	const options = {
+		method: 'GET',
+		url: `${type}/${id}/videos?language=en-US`,
+	};
+	try {
+		const { data: response } = await axios.request(options);
+		for (const element of response.results) {
+			if (
+				element.site === 'YouTube' &&
+				element.official === true &&
+				element.type === 'Trailer'
+			) {
+				return element.key;
+			}
 		}
+		return undefined;
+	} catch (e) {
+		console.log(e);
+		return e;
 	}
-	return undefined;
 };
 
 export { getTopMovies, getSearchMovies, getMovie, getTrailer };

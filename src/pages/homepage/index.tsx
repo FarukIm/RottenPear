@@ -34,6 +34,7 @@ const HomePage = () => {
 	const getData = async () => {
 		const movieData = await getTopMovies();
 		const showData = await getTopShows();
+		console.log({ movieData });
 		setTopMovies(movieData);
 		setTopShows(showData);
 	};
@@ -42,10 +43,10 @@ const HomePage = () => {
 		if (searchValue && searchValue.length > 2) {
 			if (displayData === ItemTypes.Movies) {
 				const searchMovies = await getSearchMovies(searchValue);
-				setSearchOutput(searchMovies?.results);
+				setSearchOutput(searchMovies);
 			} else {
 				const searchShows = await getSearchShows(searchValue);
-				setSearchOutput(searchShows?.results);
+				setSearchOutput(searchShows.results);
 			}
 		}
 	};
