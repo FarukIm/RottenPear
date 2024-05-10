@@ -1,9 +1,10 @@
+//Libs
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { IMovie } from '../utils/interfaces/movies.interface';
-import { IShow } from '../utils/interfaces/shows.interface';
-
-import { ItemTypes } from '../utils/enums/homepage.enum';
+//Interfaces
+import { IMovie } from '../../utils/interfaces/movies.interface';
+import { IShow } from '../../utils/interfaces/shows.interface';
+//Enums
+import { ItemTypes } from '../../utils/enums/homepage.enum';
 
 interface TVShowsAndMoviesState {
 	topTVShows: IShow[];
@@ -19,7 +20,7 @@ const initialState: TVShowsAndMoviesState = {
 	selectedItemId: null,
 };
 
-const tvShowsAndMoviesSlice = createSlice({
+export const TvShowsAndMoviesSlice = createSlice({
 	name: 'tvShowsAndMovies',
 	initialState,
 	reducers: {
@@ -38,11 +39,11 @@ const tvShowsAndMoviesSlice = createSlice({
 	},
 });
 
+export default TvShowsAndMoviesSlice.reducer;
+
 export const {
-	setTopTVShows,
 	setTopMovies,
+	setTopTVShows,
 	setSelectedType,
 	setSelectedItemId,
-} = tvShowsAndMoviesSlice.actions;
-
-export default tvShowsAndMoviesSlice.reducer;
+} = TvShowsAndMoviesSlice.actions;

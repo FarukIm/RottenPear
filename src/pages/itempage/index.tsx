@@ -6,6 +6,8 @@ import Header from '../../components/Header';
 //Api
 import { getMovie, getTrailer } from '../../api/movies';
 import { getShow } from '../../api/tvshows';
+//State
+import { useAppSelector } from '../../store';
 //Enum
 import { ItemTypes } from '../../utils/enums/homepage.enum';
 //Style
@@ -13,7 +15,8 @@ import './itempage.css';
 
 const ItemPage = () => {
 	const navigate = useNavigate();
-	const { type, id } = useParams();
+	const id = useAppSelector((state) => state.tvShowsAndMovies.selectedItemId);
+	const type = useAppSelector((state) => state.tvShowsAndMovies.selectedType);
 	const [data, setData] = useState<any>([]);
 	const [trailer, setTrailer] = useState();
 
@@ -37,13 +40,13 @@ const ItemPage = () => {
 	useEffect(() => {
 		const getData = async () => {
 			if (type === ItemTypes.Movies) {
-				const _data = await getMovie(id);
+				const _data = await getMovie(String(id));
 				setData(_data);
 			} else {
-				const _data = await getShow(id);
+				const _data = await getShow(String(id));
 				setData(_data);
 			}
-			const _trailer = await getTrailer(id, type);
+			const _trailer = await getTrailer(String(id), type);
 			setTrailer(_trailer);
 		};
 		getData();

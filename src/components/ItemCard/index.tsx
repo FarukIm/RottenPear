@@ -1,12 +1,16 @@
+//libs
 import React from 'react';
-
 import { useNavigate } from 'react-router-dom';
-
+//state
+import { useAppDispatch } from '../../store';
+import { setSelectedItemId } from '../../store/features/tvShowsAndMoviesSlice';
+//interfaces
 import { ICard } from '../../utils/interfaces/card.interface';
 import { IMovie } from '../../utils/interfaces/movies.interface';
 
 const ItemCard: React.FC<ICard> = ({ item }) => {
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 
 	const getPoster = (path: string) => {
 		return (
@@ -21,13 +25,16 @@ const ItemCard: React.FC<ICard> = ({ item }) => {
 		return 'title' in object;
 	}
 
+	const handleCardClick = () => {
+		dispatch(setSelectedItemId(item.id));
+		navigate('../item');
+	};
+
 	return (
 		<button
 			className="itemContainer"
 			onClick={() => {
-				navigate(
-					isMovie(item) ? '../item/movie/' + item.id : '../item/tv/' + item.id
-				);
+				handleCardClick();
 			}}>
 			<div className="posterContainer">
 				{getPoster(item.poster_path)}

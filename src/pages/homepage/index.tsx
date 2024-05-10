@@ -1,15 +1,20 @@
 //Libs
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 //Components
 import Header from '../../components/Header';
 import Search from '../../components/Search';
 //Api
 import { getTopMovies, getSearchMovies } from '../../api/movies';
 import { getTopShows, getSearchShows } from '../../api/tvshows';
-//Interfaces
-import { IMovie } from '../../utils/interfaces/movies.interface';
-import { IShow } from '../../utils/interfaces/shows.interface';
+//State
+import { useAppDispatch, useAppSelector } from '../../store';
+import {
+	setSelectedType,
+	setTopMovies,
+	setTopTVShows,
+} from '../../store/features/tvShowsAndMoviesSlice';
+import { setSearchResults } from '../../store/features/searchSlice';
 //Enums
 import { ItemTypes } from '../../utils/enums/homepage.enum';
 //Style
@@ -18,74 +23,51 @@ import ItemCard from '../../components/ItemCard';
 
 const HomePage = () => {
 	const navigate = useNavigate();
-	const [searchParams] = useSearchParams();
-	const searchParam = searchParams.get('s');
-	const [displayData, setDisplayData] = useState<ItemTypes | string | null>(
-		searchParams.get('d') != null ? searchParams.get('d') : ItemTypes.TV
-	);
-	const [searchValue, setSearchValue] = useState<string>(
-		searchParam ? searchParam : ''
-	);
-	const [searchOutput, setSearchOutput] = useState([]);
-	const [topMovies, setTopMovies] = useState<IMovie[]>([]);
-	const [topShows, setTopShows] = useState<IShow[]>([]);
-	let typingTimer: NodeJS.Timeout;
+	const dispatch = useAppDispatch();
 
-	const getData = async () => {
-		const movieData = await getTopMovies();
-		const showData = await getTopShows();
-		console.log({ movieData });
-		setTopMovies(movieData);
-		setTopShows(showData);
-	};
-
-	const getSearchItems = async () => {
-		if (searchValue && searchValue.length > 2) {
-			if (displayData === ItemTypes.Movies) {
-				const searchMovies = await getSearchMovies(searchValue);
-				setSearchOutput(searchMovies);
-			} else {
-				const searchShows = await getSearchShows(searchValue);
-				setSearchOutput(searchShows.results);
-			}
-		}
-	};
+	const displayData = useAppSelector(
+		(state) => state.tvShowsAndMovies.selectedType
+	);
+	const topMovies = useAppSelector((state) => state.tvShowsAndMovies.topMovies);
+	const topShows = useAppSelector((state) => state.tvShowsAndMovies.topTVShows);
+	const searchTerm = useAppSelector((state) => state.search.term);
+	const searchResults = useAppSelector((state) => state.search.results);
 
 	useEffect(() => {
-		console.log(searchParam);
-		if (searchValue.length < 3) {
+		const getData = async () => {
+			const movieData = await getTopMovies();
+			const showData = await getTopShows();
+			dispatch(setTopMovies(movieData));
+			dispatch(setTopTVShows(showData));
+		};
+
+		const getSearchItems = async () => {
+			if (searchTerm && searchTerm.length > 2) {
+				if (displayData === ItemTypes.Movies) {
+					const searchMovies = await getSearchMovies(searchTerm);
+					dispatch(setSearchResults(searchMovies));
+				} else {
+					const searchShows = await getSearchShows(searchTerm);
+					dispatch(setSearchResults(searchShows));
+				}
+			}
+		};
+
+		if (
+			searchTerm.length < 3 &&
+			topMovies.length === 0 &&
+			topShows.length === 0
+		) {
 			getData();
 		} else {
 			getSearchItems();
 		}
-		navigate(`/homepage/?s=${searchValue}&d=${displayData}`);
-	}, [displayData, searchValue]);
+		navigate(`/homepage/?s=${searchTerm}&d=${displayData}`);
+	}, [displayData, searchTerm]);
 
 	const updateDisplayData = (name: string) => {
-		if (name === ItemTypes.TV) setDisplayData(ItemTypes.TV);
-		else setDisplayData(ItemTypes.Movies);
-	};
-
-	const searchBar = () => {
-		return (
-			<div className="center margin-top">
-				<input
-					className="searchBar"
-					type="search"
-					value={searchValue}
-					onChange={(e) => {
-						setSearchValue(e.target.value);
-					}}
-					onKeyUp={() => {
-						clearTimeout(typingTimer);
-						typingTimer = setTimeout(() => {
-							getSearchItems();
-						}, 1000);
-					}}
-					placeholder="Search..."
-				/>
-			</div>
-		);
+		if (name === ItemTypes.TV) dispatch(setSelectedType(ItemTypes.TV));
+		else dispatch(setSelectedType(ItemTypes.Movies));
 	};
 
 	const categoryButton = (name: string) => {
@@ -104,33 +86,16 @@ const HomePage = () => {
 	};
 
 	const displayContent = () => {
-		if (displayData === ItemTypes.Movies) {
-			if (searchValue.length < 3) {
-				return topMovies.map((item: IMovie) => (
-					<ItemCard item={item} key={item.id} />
-				));
-			} else {
-				return searchOutput.map((item: IMovie) => (
-					<ItemCard item={item} key={item.id} />
-				));
-			}
-		} else {
-			if (searchValue.length < 3) {
-				return topShows.map((item: IShow) => (
-					<ItemCard item={item} key={item.id} />
-				));
-			} else {
-				return searchOutput.map((item: IShow) => (
-					<ItemCard item={item} key={item.id} />
-				));
-			}
-		}
+		const itemsToDisplay =
+			displayData === ItemTypes.Movies ? topMovies : topShows;
+		const items = searchTerm.length < 3 ? itemsToDisplay : searchResults;
+		return items.map((item) => <ItemCard item={item} key={item.id} />);
 	};
 
 	return (
 		<>
 			<Header />
-			<Search searchValue={searchValue} setSearchValue={setSearchValue} />
+			<Search />
 			<div className="center margin-top">
 				{categoryButton('TV Shows')}
 				{categoryButton('Movies')}

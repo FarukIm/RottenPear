@@ -1,18 +1,23 @@
+//libs
 import React from 'react';
-
-import { SearchProps } from '../../utils/interfaces/search.interface';
-
+//state
+import { useAppDispatch, useAppSelector } from '../../store';
+import { setSearchTerm } from '../../store/features/searchSlice';
+//style
 import './search.css';
 
-const Search: React.FC<SearchProps> = ({ searchValue, setSearchValue }) => {
+const Search = () => {
+	const dispatch = useAppDispatch();
+	const searchTerm = useAppSelector((state) => state.search.term);
+
 	return (
 		<div className="center margin-top">
 			<input
 				className="searchBar"
 				type="search"
-				value={searchValue}
+				value={searchTerm}
 				onChange={(e) => {
-					setSearchValue(e.target.value);
+					dispatch(setSearchTerm(e.target.value));
 				}}
 				placeholder="Search..."
 			/>

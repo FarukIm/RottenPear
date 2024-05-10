@@ -1,9 +1,8 @@
-// searchSlice.ts
-
+//libs
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { IMovie } from '../utils/interfaces/movies.interface';
-import { IShow } from '../utils/interfaces/shows.interface';
+//interfaces
+import { IMovie } from '../../utils/interfaces/movies.interface';
+import { IShow } from '../../utils/interfaces/shows.interface';
 
 interface SearchState {
 	results: (IMovie | IShow)[];
@@ -15,7 +14,7 @@ const initialState: SearchState = {
 	term: '',
 };
 
-const searchSlice = createSlice({
+export const SearchSlice = createSlice({
 	name: 'search',
 	initialState,
 	reducers: {
@@ -28,6 +27,6 @@ const searchSlice = createSlice({
 	},
 });
 
-export const { setSearchResults, setSearchTerm } = searchSlice.actions;
+export default SearchSlice.reducer;
 
-export default searchSlice.reducer;
+export const { setSearchResults, setSearchTerm } = SearchSlice.actions;

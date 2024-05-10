@@ -1,16 +1,18 @@
+//libs
 import { configureStore } from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+//slices
+import { TvShowsAndMoviesSlice } from './features/tvShowsAndMoviesSlice';
+import { SearchSlice } from './features/searchSlice';
 
-const store = configureStore({
+export const store = configureStore({
 	reducer: {
-		movies: () => [],
-		shows: () => [],
-		homepage: () => [],
-		searchTerm: () => '',
+		tvShowsAndMovies: TvShowsAndMoviesSlice.reducer,
+		search: SearchSlice.reducer,
 	},
 });
 
-export default store;
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => typeof store.dispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<
+	ReturnType<typeof store.getState>
+> = useSelector;
