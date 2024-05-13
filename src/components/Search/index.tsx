@@ -1,5 +1,5 @@
 //Libs
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 //State
 import { useAppDispatch, useAppSelector } from '../../store';
 import { setSearchTerm } from '../../store/features/searchSlice';
@@ -12,8 +12,11 @@ const Search = () => {
 	const dispatch = useAppDispatch();
 	const searchTerm = useAppSelector((state) => state.search.term);
 	const [query, setQuery] = useState(searchTerm);
+	const debouncedSearchTerm = useDebounce(query, 1000);
 
-	dispatch(setSearchTerm(useDebounce(query, 1000)));
+	useEffect(() => {
+		dispatch(setSearchTerm(debouncedSearchTerm));
+	}, [debouncedSearchTerm, dispatch]);
 
 	return (
 		<div className="center margin-top">

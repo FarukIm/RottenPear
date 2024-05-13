@@ -60,7 +60,7 @@ const HomePage = () => {
 		} else {
 			getSearchItems();
 		}
-	}, [displayData, searchTerm]);
+	}, [displayData, searchTerm, dispatch, topMovies.length, topShows.length]);
 
 	const updateDisplayData = (name: string) => {
 		if (name === ItemTypes.TV) dispatch(setSelectedType(ItemTypes.TV));
