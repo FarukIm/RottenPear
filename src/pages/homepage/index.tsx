@@ -1,6 +1,5 @@
 //Libs
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 //Components
 import Header from '../../components/Header';
 import Search from '../../components/Search';
@@ -22,7 +21,6 @@ import './homepage.css';
 import ItemCard from '../../components/ItemCard';
 
 const HomePage = () => {
-	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 
 	const displayData = useAppSelector(
@@ -62,7 +60,6 @@ const HomePage = () => {
 		} else {
 			getSearchItems();
 		}
-		navigate(`/homepage/?s=${searchTerm}&d=${displayData}`);
 	}, [displayData, searchTerm]);
 
 	const updateDisplayData = (name: string) => {

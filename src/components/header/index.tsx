@@ -1,11 +1,11 @@
-import './header.css';
+import styles from './header.module.css';
 import rottenpearlogo from '../../assets/images/rottenpearlogo.png';
 
 const Header = () => {
 	return (
-		<div className="titleContainer">
+		<div className={styles.titleContainer}>
 			<img
-				className="logoStyle"
+				className={styles.logoStyle}
 				src={rottenpearlogo}
 				alt="company logo, rottenPear"
 			/>{' '}
