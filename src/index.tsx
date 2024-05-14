@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import axios from 'axios';
+import Axios from 'axios';
 //Redux
 import { Provider } from 'react-redux';
 import { store } from './store';
@@ -11,14 +11,13 @@ import App from './App';
 //Style
 import './index.css';
 
-//Basic configuration for axios API, issues with using env variables
-const apiURL = 'https://api.themoviedb.org/3/';
-const apiKey =
-	'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjNzFjNGNmY2NhMGQwM2Y1NzdhNWU2MGQyMTE0MWM1OCIsInN1YiI6IjYzOTFhN2RhMTg4NjRiMDA3Y2RkNjZlZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.crxfVE5T30pdq6-BmpnX7IoQSSq9-N0CjPk8wRQxqzk';
+const apiURL = process.env.REACT_APP_API_URL;
+const apiKey = process.env.REACT_APP_API_KEY;
 
-axios.defaults.baseURL = apiURL;
-axios.defaults.headers.common['Authorization'] = apiKey;
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+//Basic configuration for axios
+Axios.defaults.baseURL = apiURL;
+Axios.defaults.headers.common['Authorization'] = 'Bearer ' + apiKey;
+Axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
