@@ -1,29 +1,31 @@
 .container {
-	width: 100%;
-	max-width: 1200px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 2rem;
+	@media screen and (max-width: 1200px) {
+		padding: 0 1rem;
+	}
 }
 
-.center {
+.buttonContainer {
+	width: 100%;
+	max-width: 1200px;
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .start {
 	width: 100%;
-	display: flex;
-	justify-content: flex-start;
-	align-items: flex-start;
-}
-
-.margin-top {
-	margin-top: 0.5rem;
 }
 
 .backButton {
 	display: flex;
 	align-items: center;
 	text-align: center;
-	align-self: flex-start;
+
 	font-size: 1rem;
 	color: #1c131480;
 	border: solid 2px #1c131471;
@@ -32,6 +34,7 @@
 	padding: 0 6px;
 	cursor: pointer;
 }
+
 .backArrow {
 	height: 0px;
 	width: 0px;
@@ -54,22 +57,13 @@
 }
 
 .itemTitle {
-	display: flex;
-	width: 100%;
-	justify-content: flex-start;
-	font-size: 36px;
+	font-size: 2.25rem;
 	font-weight: 600;
 }
 
-.mediaContainer {
-	height: 70vw;
-	min-height: 100px;
-	max-height: 400px;
-}
 .video {
+	aspect-ratio: 16 / 9;
 	width: 100%;
-	max-width: 700px;
-	height: 100%;
 }
 
 .overview {

@@ -6,7 +6,7 @@ import { setSearchTerm } from '../../store/features/searchSlice';
 //Hooks
 import useDebounce from '../../hooks/useDebounce';
 //Style
-import './search.css';
+import styles from './search.module.css';
 
 const Search = () => {
 	const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ const Search = () => {
 	return (
 		<div className="center margin-top">
 			<input
-				className="searchBar"
+				className={styles.searchBar}
 				type="search"
 				placeholder="Search..."
 				onChange={(e) => setQuery(e.target.value)}

@@ -1,6 +1,6 @@
 # How to use the project
 
-Clone the project into desired directory by navigating to desired directory opening bash and running:
+Clone the project into desired directory by navigating to desired directory opening bash or terminal and running:
 
 ```
 git clone https://github.com/FarukIm/RottenPear.git
@@ -14,7 +14,7 @@ Next, you should navigate to the RottenPear directory within your terminal and i
 npm install
 ```
 
-Once that is done, to run the server you use the command:
+Once that is done, to run the server use the command:
 
 ```
 npm start

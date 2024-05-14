@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 //Components
 import Header from '../../components/Header';
 import Search from '../../components/Search';
+import ItemCard from '../../components/ItemCard';
 //Api
 import { getTopMovies, getSearchMovies } from '../../api/movies';
 import { getTopShows, getSearchShows } from '../../api/tvshows';
@@ -17,8 +18,7 @@ import { setSearchResults } from '../../store/features/searchSlice';
 //Enums
 import { ItemTypes } from '../../utils/enums/homepage.enum';
 //Style
-import './homepage.css';
-import ItemCard from '../../components/ItemCard';
+import styles from './homepage.module.css';
 
 const HomePage = () => {
 	const dispatch = useAppDispatch();
@@ -73,7 +73,9 @@ const HomePage = () => {
 			<div>
 				<button
 					className={
-						show === displayData ? 'categoryButtonSelected' : 'categoryButton'
+						show === displayData
+							? styles.categoryButtonSelected
+							: styles.categoryButton
 					}
 					onClick={() => updateDisplayData(show)}>
 					{name}
@@ -98,7 +100,9 @@ const HomePage = () => {
 				{categoryButton('Movies')}
 			</div>
 			<div className="center">
-				<div className="container margin-top">{displayContent()}</div>
+				<div className={`${styles.container} margin-top`}>
+					{displayContent()}
+				</div>
 			</div>
 		</>
 	);

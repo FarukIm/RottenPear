@@ -1,8 +1,8 @@
 .titleContainer {
 	width: 100%;
 	height: min-content;
-	background-color: #9e7b25;
-	font-family: "Courier New", Courier, monospace;
+	background-color: #ffe5a2;
+	font-family: 'Courier New', Courier, monospace;
 	font-weight: 600;
 	font-size-adjust: none;
 	font-size: min(6vw, 48px);

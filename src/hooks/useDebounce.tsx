@@ -1,5 +1,7 @@
+//Libs
 import { useEffect, useState } from 'react';
 
+//General hook for debouncing text input
 function useDebounce(value: string, delay: number) {
 	const [debouncedValue, setDebouncedValue] = useState(value);
 

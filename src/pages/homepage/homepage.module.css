@@ -1,0 +1,41 @@
+.categoryButtonSelected {
+	margin: 0 1rem;
+	background: none;
+	color: inherit;
+	border: none;
+	border-bottom: 4px solid #1c1314;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+	color: #1c1314;
+	font-weight: 600;
+	font-size: 20px;
+	transition: 0.2s;
+}
+.categoryButton {
+	margin: 0 1rem;
+	background: none;
+	color: inherit;
+	border: none;
+	border-bottom: 1px solid #1c1314;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+	color: #1c1314;
+	font-weight: 100;
+	font-size: 18px;
+	transition: 0.2;
+}
+
+.container {
+	display: flex;
+	flex-flow: wrap row;
+	width: 100%;
+	max-width: 1200px;
+	margin-bottom: 2rem;
+	gap: 1rem;
+	justify-content: center;
+	align-items: center;
+}

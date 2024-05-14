@@ -1,0 +1,42 @@
+.itemContainer {
+	width: 30%;
+	min-width: 15rem;
+	height: 400px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	overflow-y: hidden;
+	padding-top: 2px;
+	border-radius: 0.5rem;
+	border: solid 1px rgb(212, 212, 212);
+	cursor: pointer;
+	background-color: rgb(255, 252, 252);
+	color: #1c1314e5;
+	font-size: 1rem;
+	font-weight: 600;
+	text-align: center;
+}
+
+.posterContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.poster {
+	max-height: 320px;
+	text-align: center;
+	line-height: 300px;
+	border-radius: 5px;
+	text-decoration: underline;
+}
+
+.itemTitle {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}

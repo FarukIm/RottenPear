@@ -1,6 +1,6 @@
 //Libs
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 //Components
 import Header from '../../components/Header';
 //Api
@@ -11,7 +11,7 @@ import { useAppSelector } from '../../store';
 //Enum
 import { ItemTypes } from '../../utils/enums/homepage.enum';
 //Style
-import './itempage.css';
+import styles from './itempage.module.css';
 
 const ItemPage = () => {
 	const navigate = useNavigate();
@@ -50,37 +50,35 @@ const ItemPage = () => {
 			setTrailer(_trailer);
 		};
 		getData();
-	}, []);
+	}, [type, id]);
 
 	return (
 		<>
 			<Header />
 			<div className="center">
-				<div className="container">
-					<div className="start">
+				<div className={styles.container}>
+					<div className={`${styles.buttonContainer}`}>
+						<h1 className={styles.itemTitle}>{renderTitle()}</h1>
 						<button
-							className="backButton margin-top"
+							className={`${styles.backButton}`}
 							onClick={() => {
 								navigate(-1);
 							}}>
-							<div className="backArrow" />
+							<div className={styles.backArrow} />
 							Back
 						</button>
 					</div>
-					<h1 className="itemTitle">{renderTitle()}</h1>
-					<div className="mediaContainer start">
-						{trailer ? (
-							<iframe
-								className="video"
-								src={`https://www.youtube.com/embed/${trailer}`}
-								title="YouTube video player"
-							/>
-						) : (
-							getPoster(data?.poster_path)
-						)}
-					</div>
-					<div className="start">
-						<div className="overview ">
+					{trailer ? (
+						<iframe
+							className={styles.video}
+							src={`https://www.youtube.com/embed/${trailer}`}
+							title="YouTube video player"
+						/>
+					) : (
+						getPoster(data?.poster_path)
+					)}
+					<div>
+						<div className={styles.overview}>
 							<h2>Overview:</h2>
 							{data.overview}
 						</div>

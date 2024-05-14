@@ -1,5 +1,7 @@
-import styles from './header.module.css';
+//Assets
 import rottenpearlogo from '../../assets/images/rottenpearlogo.png';
+//Style
+import styles from './header.module.css';
 
 const Header = () => {
 	return (

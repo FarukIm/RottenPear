@@ -1,6 +1,6 @@
-//libs
+//Libs
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-//interfaces
+//Interfaces
 import { IMovie } from '../../utils/interfaces/movies.interface';
 import { IShow } from '../../utils/interfaces/shows.interface';
 

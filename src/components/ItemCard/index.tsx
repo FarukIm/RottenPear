@@ -7,6 +7,8 @@ import { setSelectedItemId } from '../../store/features/tvShowsAndMoviesSlice';
 //interfaces
 import { ICard } from '../../utils/interfaces/card.interface';
 import { IMovie } from '../../utils/interfaces/movies.interface';
+//Style
+import styles from './itemCard.module.css';
 
 const ItemCard: React.FC<ICard> = ({ item }) => {
 	const navigate = useNavigate();
@@ -15,7 +17,7 @@ const ItemCard: React.FC<ICard> = ({ item }) => {
 	const getPoster = (path: string) => {
 		return (
 			<img
-				className="poster"
+				className={styles.poster}
 				src={'https://image.tmdb.org/t/p/w300' + path}
 				alt="Poster not available"></img>
 		);
@@ -32,13 +34,16 @@ const ItemCard: React.FC<ICard> = ({ item }) => {
 
 	return (
 		<button
-			className="itemContainer"
+			className={styles.itemContainer}
 			onClick={() => {
 				handleCardClick();
-			}}>
-			<div className="posterContainer">
+			}}
+			title={isMovie(item) ? item.title : item.name}>
+			<div className={styles.posterContainer}>
 				{getPoster(item.poster_path)}
-				<p>{isMovie(item) ? item.title : item.name}</p>
+				<p className={styles.itemTitle}>
+					{isMovie(item) ? item.title : item.name}
+				</p>
 			</div>
 		</button>
 	);
